@@ -1,4 +1,4 @@
-#The Oyster Card System
+# The Oyster Card System
 You are required to model the following fare card system which is a limited version of
 London’s Oyster card system. At the end of the test, you should be able to demonstrate a
 user loading a card with £30, and taking the following trips, and then viewing the balance.
@@ -6,7 +6,7 @@ user loading a card with £30, and taking the following trips, and then viewing 
 - 328 bus from Earl’s Court to Chelsea
 - Tube Earl’s court to Hammersmith
 
-##Operation
+## Operation
 When the user passes through the inward barrier at the station, their oyster card is charged
 the maximum fare.
 
@@ -21,7 +21,7 @@ journey. E.g. Holburn to Earl’s Court is charged at £2.50.
 
 For the purposes of this test use the following data:
 
-##Stations and zones:
+## Stations and zones:
 
 |Station      | Zone(s)|
 |---          | ---    |
@@ -30,7 +30,7 @@ For the purposes of this test use the following data:
 |Wimbledon    | 3      |
 |Hammersmith  | 2      |
 
-##Fares:
+## Fares:
 
 | Journey                        | Fare    |
 | ---                            | ---     |
