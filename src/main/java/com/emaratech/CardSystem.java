@@ -28,12 +28,12 @@ public class CardSystem {
         cardHasSufficientBalance(card, station);
         if(vehicle instanceof Tube) {
             card.balance = card.balance.subtract(station.fareOfZone());
-            Travel travel = new Travel();
-            travel.inStation = station;
-            travels.put(card, travel);
         } else {
             card.balance = card.balance.subtract(vehicle.maxFare());
         }
+        Travel travel = new Travel();
+        travel.inStation = station;
+        travels.put(card, travel);
     }
 
     private void cardHasSufficientBalance(Card card, Station station) {
