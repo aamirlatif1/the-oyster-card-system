@@ -1,8 +1,6 @@
 package com.emaratech;
 
 
-import javax.naming.InsufficientResourcesException;
-
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -26,41 +24,45 @@ public class CardSystem {
 
     private Map<Card, Travel> travels = new HashMap<>();
 
-    public void checkIn(Card card, Vehicle vehicle) {
-        card.balance = card.balance.subtract(vehicle.maxFare());
+    public void checkIn(Card card, Vehicle vehicle, Station station) {
+        cardHasSufficientBalance(card, station);
+        if(vehicle instanceof Tube) {
+            card.balance = card.balance.subtract(station.fareOfZone());
+            Travel travel = new Travel();
+            travel.inStation = station;
+            travels.put(card, travel);
+        } else {
+            card.balance = card.balance.subtract(vehicle.maxFare());
+        }
     }
 
-    public void checkIn(Card card, Vehicle vehicle, Station station) {
+    private void cardHasSufficientBalance(Card card, Station station) {
         if(card.balance.compareTo(station.fareOfZone()) < 0)
-            throw new InsufficentBalanceException("You have not sufficent balance");
-        card.balance = card.balance.subtract(station.fareOfZone());
-        Travel travel = new Travel();
-        travel.inStation = station;
-        travels.put(card, travel);
+            throw new InsufficentBalanceException("You have not sufficient balance");
+    }
+
+    public static BigDecimal getFare(int from, int to) {
+        return zoneFares.get(new ZoneKey(from, to));
     }
 
     public void checkOut(Card card, Vehicle vehicle, Station outStation) {
         Travel travel = travels.get(card);
+        if(vehicle instanceof Bus) return;
         BigDecimal fare = calculateFare(travel.inStation, outStation);
         card.balance = card.balance.add(travel.inStation.fareOfZone().subtract(fare));
     }
 
     private BigDecimal calculateFare(Station inStation, Station outStation) {
-        List<BigDecimal> allFares = new ArrayList();
-        for (int i : inStation.zones){
-            for (int j : outStation.zones){
-                allFares.add(getFare(i, j));
-            }
-        }
-        Optional<BigDecimal> output =  allFares.stream().max(Comparator.naturalOrder());
-        BigDecimal fare = BigDecimal.ZERO;
-        if(output.isPresent())
-            fare = output.get();
-        return fare;
+        List<BigDecimal> allFares = allFareBetweenStations(inStation, outStation);
+        return allFares.stream().max(Comparator.naturalOrder()).get();
     }
 
-    public static BigDecimal getFare(int from, int to) {
-        return zoneFares.get(new ZoneKey(from, to));
+    private List<BigDecimal> allFareBetweenStations(Station inStation, Station outStation) {
+        List<BigDecimal> allFares = new ArrayList();
+        for (int i : inStation.zones)
+            for (int j : outStation.zones)
+                allFares.add(getFare(i, j));
+        return allFares;
     }
 
 

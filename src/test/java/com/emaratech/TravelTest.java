@@ -11,9 +11,10 @@ public class TravelTest {
 
     static final BigDecimal cardBalance = BigDecimal.valueOf(30.00);
 
-    static final Bus bus = new Bus("B12");
+    static final Bus bus = new Bus();
     static final Tube tube = new Tube();
 
+    static final Station chelsea = new Station("Chelsea", new int[]{1});
     static final Station holborn = new Station("Holborn", new int[]{1});
     static final Station earlCourt = new Station("Earl's Court", new int[]{1, 2});
     static final Station hammersmith = new Station("Hammersmith", new int[]{2});
@@ -34,7 +35,7 @@ public class TravelTest {
 
     @Test
     public void checkInBus() throws Exception {
-        cardSystem.checkIn(card, bus);
+        cardSystem.checkIn(card, bus, chelsea);
         assertEquals(cardBalance.subtract(bus.maxFare()), card.balance);
     }
 
@@ -59,9 +60,13 @@ public class TravelTest {
     public void travelMultipleStations() throws Exception {
         cardSystem.checkIn(card, tube, holborn);
         cardSystem.checkOut(card, tube, earlCourt);
-        cardSystem.checkIn(card, bus);
-        cardSystem.checkIn(card, tube, earlCourt);
+
+        cardSystem.checkIn(card, bus, chelsea);
         cardSystem.checkOut(card, tube, hammersmith);
+
+        cardSystem.checkIn(card, tube, earlCourt);
+        cardSystem.checkOut(card, bus, hammersmith);
+
         assertEquals(cardBalance.subtract(holbornToEarlsCoourt.add(bus.maxFare()).add(earlsCourtToHammsmit)), card.balance);
     }
 

@@ -17,9 +17,9 @@ public class Station {
 
     public BigDecimal fareOfZone() {
         List<BigDecimal> allFares = new ArrayList();
-        for (int i : zones){
+        for (int i : zones)
             allFares.add(CardSystem.getFare(i, i));
-        }
+
         Optional<BigDecimal> output =  allFares.stream().max(Comparator.naturalOrder());
         BigDecimal fare = BigDecimal.ZERO;
         if(output.isPresent())
