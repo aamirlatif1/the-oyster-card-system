@@ -67,7 +67,7 @@ public class TravelTest {
         cardSystem.checkIn(card, tube, earlCourt);
         cardSystem.checkOut(card, bus, hammersmith);
 
-        assertEquals(cardBalance.subtract(holbornToEarlsCoourt.add(bus.maxFare()).add(earlsCourtToHammsmit)), card.balance);
+        assertEquals("This is a test message", cardBalance.subtract(holbornToEarlsCoourt.add(bus.maxFare()).add(earlsCourtToHammsmit)), card.balance);
     }
 
     @Test(expected = InsufficentBalanceException.class)
